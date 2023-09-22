@@ -22,7 +22,7 @@ router.get('/', usuariosGet )
 //actualizar
 router.put('/:id', [
   check('id','No es un ID valido').isMongoId(),
-  // check('id').custom(existeUsuarioById),
+  check('id').custom(existeUsuarioById),
   check('rol').custom( esRoleValido ),
   validarCampos
 ],usuariosPut )
@@ -44,7 +44,7 @@ router.patch('/', usuariosPatch )
 //borrar
 router.delete('/:id', [
   check('id','No es un ID valido').isMongoId(),
-  // check('id').custom(existeUsuarioById),
+  check('id').custom(existeUsuarioById),
   validarCampos
 ],usuariosDelete )
 
