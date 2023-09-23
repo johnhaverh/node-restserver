@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const Usuario = require('../models/usuario');
 
-const validarJWT = (req, res, next) => {
+const validarJWT = async (req, res, next) => {
     const token = req.header('x-token');
 
     if (!token){
@@ -10,9 +11,10 @@ const validarJWT = (req, res, next) => {
     }
 
     try {
-
         const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
-        req.uid = uid;
+        const usuario = await Usuario.findById(uid);
+        req.usuario = usuario;
+        // req.uid=uid;
 
         next();
     } catch (error) {
@@ -20,7 +22,6 @@ const validarJWT = (req, res, next) => {
             msg: 'Token no valido',
         })
     }
-
 }
 
 module.exports = {
