@@ -77,12 +77,12 @@ const usuariosPatch = (req, res = response) => {
     
     //metodo cambiando solo el estado del usuario
     const usuario = await Usuario.findByIdAndUpdate( id, {estado: false} );
-    const usuarioAutenticado = req.usuario;
+    // const usuarioAutenticado = req.usuario;
     // const uid = req.uid;
     
     res.json({
       usuario,
-      usuarioAutenticado
+      // usuarioAutenticado
     })
   }
 

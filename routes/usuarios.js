@@ -14,6 +14,7 @@ const { usuariosGet,
 
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
+const { adminRole, tieneRole } = require('../middlewares/validar-roles');
 
 const router = Router();
 
@@ -45,6 +46,8 @@ router.patch('/', usuariosPatch )
 //borrar
 router.delete('/:id', [
   validarJWT,
+  // adminRole,
+  tieneRole('ADMIN_ROLE','VENTAS_ROLE'),
   check('id','No es un ID valido').isMongoId(),
   check('id').custom(existeUsuarioById),
   validarCampos
