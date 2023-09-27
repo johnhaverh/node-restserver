@@ -1,41 +1,53 @@
 const {response} = require('express');
 const {Categoria} = require('../models');
 
-// const categoriasGet = async (req = request, res = response) => {
+const categoriasGet = async (req = request, res = response) => {
 
-//     const {limite = 5, desde = 0 } = req.query;
-//     const query = {estado: true};
+    const {limite = 5, desde = 0 } = req.query;
+    const query = {estado: true};
 
-//     const [total, usuarios] = await Promise.all([
-//       Usuario.countDocuments(query),
-//       Usuario.find(query)
-//           .skip(Number(desde))
-//           .limit(Number(limite))
-//     ]);
+    const [total, categorias] = await Promise.all([
+      Categoria.countDocuments(query),
+      Categoria.find(query)
+          .skip(Number(desde))
+          .limit(Number(limite))
+    ]);
 
 
-//     res.json({
-//       total,
-//       usuarios
-//     })
-//   }
+    res.json({
+      total,
+      categorias
+    })
+  }
 
-// const categoriasPut = async (req, res = response) => {
+const categoriasGetId = async (req = request, res = response) => {
+
+  const id= req.params.id;
+
+  const categoria = await Categoria.findById(id);
+  
+  res.json({
+      categoria
+  })
+}
+
+
+const categoriasPut = async (req, res = response) => {
     
-//     const id= req.params.id;  
-//     const {_id, password, google, correo, ...resto} = req.body;
+    const id= req.params.id;  
+    const {_id, ...resto} = req.body;
 
-//     if (password){
-//         const salt = bcryptjs.genSaltSync();
-//         resto.password = bcryptjs.hashSync(password,salt);
-//     }
+    // const data = {
+    //   nombre,
+    //   usuario: req.usuario._id,
+    // }
 
-//     const usuario = await Usuario.findByIdAndUpdate( id, resto );
+    const categoria = await Categoria.findByIdAndUpdate( id, resto );
     
-//     res.json({
-//         usuario
-//     })
-//   }
+    res.json({
+        categoria
+    })
+  }
 
 const categoriasPost = async (req, res = response) => {
 
@@ -63,35 +75,33 @@ const categoriasPost = async (req, res = response) => {
     })
   }
 
-// const categoriasPatch = (req, res = response) => {
-//     res.json({
-//         msg: 'Peticion Patch - controlador'
-//     })
-//   }
+const categoriasPatch = (req, res = response) => {
+    res.json({
+        msg: 'Peticion Patch - controlador'
+    })
+  }
 
-// const categoriasDelete = async (req, res = response) => {
+const categoriasDelete = async (req, res = response) => {
     
-//     const id = req.params.id; 
+    const id = req.params.id; 
     
-//     //metodo para borrar fisicamente de la DB
-//     // const usuario = await Usuario.findByIdAndDelete( id );
+    //metodo para borrar fisicamente de la DB
+    // const categoria = await Categoria.findByIdAndDelete( id );
+
+    //metodo cambiando solo el estado de la categoria
+    const categoria = await Categoria.findByIdAndUpdate( id, {estado: false} );
     
-//     //metodo cambiando solo el estado del usuario
-//     const usuario = await Usuario.findByIdAndUpdate( id, {estado: false} );
-//     // const usuarioAutenticado = req.usuario;
-//     // const uid = req.uid;
-    
-//     res.json({
-//       usuario,
-//       // usuarioAutenticado
-//     })
-//   }
+    res.json({
+      categoria,
+    })
+  }
 
 
 module.exports = {
-    // categoriasGet,
-    // categoriasPut,
+    categoriasGet,
+    categoriasGetId,
+    categoriasPut,
     categoriasPost,
-    // categoriasPatch,
-    // categoriasDelete,
+    categoriasPatch,
+    categoriasDelete,
 }

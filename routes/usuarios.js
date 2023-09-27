@@ -6,6 +6,7 @@ const { esRoleValido,
   } = require('../helpers/db-validators');
 
 const { usuariosGet, 
+        usuariosGetId,
         usuariosPut, 
         usuariosPost, 
         usuariosPatch, 
@@ -23,8 +24,16 @@ const router = Router();
 //consultar
 router.get('/', usuariosGet )
 
+//consultar por ID
+router.get('/:id', [
+  check('id','No es un ID valido').isMongoId(),
+  check('id').custom(existeUsuarioById),
+  validarCampos
+],usuariosGetId )
+
 //actualizar
 router.put('/:id', [
+  validarJWT,
   check('id','No es un ID valido').isMongoId(),
   check('id').custom(existeUsuarioById),
   check('rol').custom( esRoleValido ),
@@ -33,6 +42,7 @@ router.put('/:id', [
 
 //crear
 router.post('/', [
+  validarJWT,
   check('nombre','Nombre es obligatorio').not().isEmpty(),
   check('correo','Formato correo errado').isEmail(),
   check('correo').custom( emailExiste ),

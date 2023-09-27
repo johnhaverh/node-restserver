@@ -29,6 +29,17 @@ const usuariosGet = async (req = request, res = response) => {
     })
   }
 
+const usuariosGetId = async (req = request, res = response) => {
+
+    const id= req.params.id;
+
+    const usuario = await Usuario.findById(id);
+    
+    res.json({
+        usuario
+    })
+  }
+
 const usuariosPut = async (req, res = response) => {
     
     const id= req.params.id;  
@@ -89,6 +100,7 @@ const usuariosPatch = (req, res = response) => {
 
 module.exports = {
     usuariosGet,
+    usuariosGetId,
     usuariosPut,
     usuariosPost,
     usuariosPatch,
