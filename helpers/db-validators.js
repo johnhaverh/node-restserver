@@ -1,6 +1,7 @@
 const Role = require('../models/role');
 const { Usuario, 
-        Categoria
+        Categoria,
+        Producto
 } = require('../models');
 
 //validaciones usuario
@@ -50,10 +51,36 @@ const categoriaExiste = async (nombre = '') => {
     }
 }
 
+
+//validaciones prodcuproductostos
+
+const existeProductoById = async (id ) => {
+    const existeProducto = await Producto.findById(id);
+    if (!existeProducto){
+        throw new Error(`id: ${ id} no existe en DB`)
+    }
+}
+
+
+const productoExiste = async (nombre = '') => {
+
+    const nombreQuery = nombre.toUpperCase();
+
+    const existeProducto = await Producto.findOne({nombreQuery});
+    if (existeProducto){
+        throw new Error(`Producto: ${ nombre} ya existe en DB`)
+    //   return res.status(400).json({
+    //     msg: 'Correo ya existe en DB',
+    //   });
+    }
+}
+
 module.exports = {
     esRoleValido,
     emailExiste,
     existeUsuarioById,
     existeCategoriaById,
-    categoriaExiste
+    categoriaExiste,
+    existeProductoById,
+    productoExiste
 }

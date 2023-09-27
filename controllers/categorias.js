@@ -43,7 +43,7 @@ const categoriasPut = async (req, res = response) => {
       usuario: req.usuario._id,
     }
 
-    const categoria = await Categoria.findByIdAndUpdate( id, data );
+    const categoria = await Categoria.findByIdAndUpdate( id, data , {new: true});
     
     res.json({
         categoria
@@ -90,7 +90,7 @@ const categoriasDelete = async (req, res = response) => {
     // const categoria = await Categoria.findByIdAndDelete( id );
 
     //metodo cambiando solo el estado de la categoria
-    const categoria = await Categoria.findByIdAndUpdate( id, {estado: false} );
+    const categoria = await Categoria.findByIdAndUpdate( id, {estado: false}, {new: true} );
     
     res.json({
       categoria,
