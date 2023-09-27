@@ -1,5 +1,5 @@
 const {response} = require('express');
-const Usuario = require('../models/usuario');
+const {Usuario} = require('../models');
 const bcryptjs = require('bcryptjs');
 
 
@@ -57,7 +57,7 @@ const usuariosPost = async (req, res = response) => {
 
     await usuario.save();
 
-    res.json({
+    res.status(201).res.json({
         usuario
     })
   }

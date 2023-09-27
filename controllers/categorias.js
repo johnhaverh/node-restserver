@@ -1,98 +1,97 @@
 const {response} = require('express');
-const bcryptjs = require('bcryptjs');
+const {Categoria} = require('../models');
 
-const Usuario = require('../models/usuario');
+// const categoriasGet = async (req = request, res = response) => {
 
-const { generarJWT } = require('../helpers/generar-jwt');
-const { googleVerify } = require('../helpers/google-verify');
+//     const {limite = 5, desde = 0 } = req.query;
+//     const query = {estado: true};
 
-const login = async (req = request, res = response) => {
+//     const [total, usuarios] = await Promise.all([
+//       Usuario.countDocuments(query),
+//       Usuario.find(query)
+//           .skip(Number(desde))
+//           .limit(Number(limite))
+//     ]);
 
-    const { correo, password} = req.body;
 
-    try {
-      const usuario = await Usuario.findOne( {correo} );
-      
-      if (!usuario){
-        return res.status(400).json({
-          msg: 'Usuario / Password no validos - correo errado',
-        })
-      }
+//     res.json({
+//       total,
+//       usuarios
+//     })
+//   }
 
-      if (!usuario.estado){
-        return res.status(400).json({
-          msg: 'Usuario / Password no validos - inactivo',
-        })
-      }
-
-      const validaPassword = bcryptjs.compareSync(password, usuario.password)
-
-      if (!validaPassword){
-        return res.status(400).json({
-          msg: 'Usuario / Password no validos - password errado',
-        })
-      }
-
-      //generacion JWT
-      const token = await generarJWT(usuario.id);
-
-      res.json({
-        usuario,
-        token
-      })
-    } catch (error) {
-      return res.status(500).json({
-        msg: `Fallo el login - contactar al administrador ${error}`,
-      })
-    }
-
-  }
-
-const googleSignIn = async (req, res=response) => {
-    const  {id_token} = req.body;
-
-    try {
-      const {nombre, img, correo} = await googleVerify(id_token);
-      
-      let usuario = await Usuario.findOne( {correo} );
-
-      if (!usuario){
-          const data = {
-              nombre,
-              correo,
-              password: ':P',
-              img,
-              google: true,
-          };
-
-          usuario = new Usuario (data);
-          await usuario.save();
-      }
-
-      if (!usuario.estado) {
-        return res.status(401).json({
-          msg: `Usuario bloqueado - validar con administrador`,
-        })
-      }
-
-      //generacion JWT
-      const token = await generarJWT(usuario.id);
-
-      res.json({
-        usuario,
-        token,
-        msg: `Validacion OK - Google`,
-      })
-    } catch (error) {
-      return res.status(400).json({
-        msg: `Fallo Google login - contactar al administrador ${error}`,
-      })
-    }
+// const categoriasPut = async (req, res = response) => {
     
+//     const id= req.params.id;  
+//     const {_id, password, google, correo, ...resto} = req.body;
 
+//     if (password){
+//         const salt = bcryptjs.genSaltSync();
+//         resto.password = bcryptjs.hashSync(password,salt);
+//     }
+
+//     const usuario = await Usuario.findByIdAndUpdate( id, resto );
+    
+//     res.json({
+//         usuario
+//     })
+//   }
+
+const categoriasPost = async (req, res = response) => {
+
+    const nombre = req.body.nombre.toUpperCase();
+
+    const categoriaDB = await Categoria.findOne({nombre})
+
+    if(categoriaDB){
+      return res.status(400).json({
+        msg: `Categoría ${categoriaDB.nombre} ya existe en DB`
+      })
+    }
+
+    const data = {
+      nombre,
+      usuario: req.usuario._id,
+    }
+
+    const categoria = new Categoria(data)
+
+    await categoria.save();
+
+    res.status(201).json({
+      categoria
+    })
   }
+
+// const categoriasPatch = (req, res = response) => {
+//     res.json({
+//         msg: 'Peticion Patch - controlador'
+//     })
+//   }
+
+// const categoriasDelete = async (req, res = response) => {
+    
+//     const id = req.params.id; 
+    
+//     //metodo para borrar fisicamente de la DB
+//     // const usuario = await Usuario.findByIdAndDelete( id );
+    
+//     //metodo cambiando solo el estado del usuario
+//     const usuario = await Usuario.findByIdAndUpdate( id, {estado: false} );
+//     // const usuarioAutenticado = req.usuario;
+//     // const uid = req.uid;
+    
+//     res.json({
+//       usuario,
+//       // usuarioAutenticado
+//     })
+//   }
+
 
 module.exports = {
-    login,
-    googleSignIn
+    // categoriasGet,
+    // categoriasPut,
+    categoriasPost,
+    // categoriasPatch,
+    // categoriasDelete,
 }

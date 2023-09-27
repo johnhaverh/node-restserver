@@ -5,6 +5,7 @@ const CategoriaSchema = Schema ({
     nombre:{
         type: String,
         required: [true, 'Nombre categoria es obligatorio'],
+        unique: true
     },   
 
     estado:{
@@ -14,12 +15,18 @@ const CategoriaSchema = Schema ({
     }, 
 
     usuario:{
-        type: Schema.Tyoes.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true,
     },    
 
 })
+
+CategoriaSchema.methods.toJSON = function() {
+    const { __v, _id, ...categoria} = this.toObject();
+    categoria.uid = _id;
+    return categoria;
+}
 
 
 module.exports = model( 'Categoria', CategoriaSchema);
