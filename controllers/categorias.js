@@ -9,6 +9,7 @@ const categoriasGet = async (req = request, res = response) => {
     const [total, categorias] = await Promise.all([
       Categoria.countDocuments(query),
       Categoria.find(query)
+          .populate('usuario', 'nombre')
           .skip(Number(desde))
           .limit(Number(limite))
     ]);
@@ -24,7 +25,7 @@ const categoriasGetId = async (req = request, res = response) => {
 
   const id= req.params.id;
 
-  const categoria = await Categoria.findById(id);
+  const categoria = await Categoria.findById(id).populate('usuario', 'nombre');
   
   res.json({
       categoria
@@ -35,14 +36,14 @@ const categoriasGetId = async (req = request, res = response) => {
 const categoriasPut = async (req, res = response) => {
     
     const id= req.params.id;  
-    const {_id, ...resto} = req.body;
+    const nombre = req.body.nombre.toUpperCase();
 
-    // const data = {
-    //   nombre,
-    //   usuario: req.usuario._id,
-    // }
+    const data = {
+      nombre,
+      usuario: req.usuario._id,
+    }
 
-    const categoria = await Categoria.findByIdAndUpdate( id, resto );
+    const categoria = await Categoria.findByIdAndUpdate( id, data );
     
     res.json({
         categoria

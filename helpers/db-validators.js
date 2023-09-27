@@ -1,6 +1,7 @@
 const Role = require('../models/role');
-const Usuario = require('../models/usuario');
-const Categoria = require('../models/categoria');
+const { Usuario, 
+        Categoria
+} = require('../models');
 
 //validaciones usuario
 const esRoleValido = async (rol = 'USER_ROLE') =>{
@@ -37,7 +38,10 @@ const existeCategoriaById = async (id ) => {
 
 
 const categoriaExiste = async (nombre = '') => {
-    const existeCategoria = await Categoria.findOne({nombre});
+
+    const nombreQuery = nombre.toUpperCase();
+
+    const existeCategoria = await Categoria.findOne({nombreQuery});
     if (existeCategoria){
         throw new Error(`Categoria: ${ nombre} ya existe en DB`)
     //   return res.status(400).json({
