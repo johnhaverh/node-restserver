@@ -10,14 +10,22 @@ const cargarArchivo = (req, res=response) => {
     }
 
     const { archivo } = req.files;
-    const uploadPath = path.join(__dirname, '../uploads/', archivo.name);
+    const nombreCortado = archivo.name.split('.');
+    const extension = nombreCortado[nombreCortado.length -1];
+
+    const extensiones = ['jpg','png','gif','jpeg'];
+    if (!extensiones.includes(extension)){
+        res.status(400).json({msg: `Solo se permiten estas extensiones de archivo ${extensiones}` });
+    }
+
+    // const uploadPath = path.join(__dirname, '../uploads/', archivo.name);
   
-    archivo.mv(uploadPath, (err) => {
-      if (err) {
-        return res.status(500).json({ err });
-      }
-      res.json({msg: 'Archivo cargado a ' + uploadPath });
-    });
+    // archivo.mv(uploadPath, (err) => {
+    //   if (err) {
+    //     return res.status(500).json({ err });
+    //   }
+    //   res.json({msg: 'Archivo cargado a ' + uploadPath });
+    // });
 
 }
 
