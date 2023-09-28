@@ -37,14 +37,12 @@ const productosGetId = async (req = request, res = response) => {
 
 
 const productosPut = async (req, res = response) => {
-    
-    const id= req.params.id;  
-    const nombre = req.body.nombre.toUpperCase();
 
-    const data = {
-      nombre,
-      usuario: req.usuario._id,
-    }
+  const {_id, estado, usuario, ...data} = req.body;
+    
+    const id= req.params.id;
+    data.nombre.toUpperCase();
+    data.usuario = req.usuario._id;
 
     const producto = await Producto.findByIdAndUpdate( id, data , {new: true});
     
@@ -55,20 +53,17 @@ const productosPut = async (req, res = response) => {
 
 const productosPost = async (req, res = response) => {
 
-    const nombre = req.body.nombre.toUpperCase();
-
+    const {estado, usuario, ...data} = req.body;
     const productoDB = await Producto.findOne({nombre})
 
     if(productoDB){
       return res.status(400).json({
-        msg: `Categoría ${ProductoDB.nombre} ya existe en DB`
+        msg: `Producto ${ProductoDB.nombre} ya existe en DB`
       })
     }
-
-    const data = {
-      nombre,
-      usuario: req.usuario._id,
-    }
+    
+    data.nombre.toUpperCase();
+    data.usuario = req.usuario._id;
 
     const producto = new Producto(data)
 

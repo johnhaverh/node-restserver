@@ -1,7 +1,8 @@
 const {Router} = require('express');
 const { check } = require('express-validator');
 const { existeProductoById,
-        productoExiste
+        productoExiste,
+        existeCategoriaById
 } = require('../helpers/db-validators');
 
 const { validarCampos,
@@ -34,6 +35,8 @@ router.post('/', [
   validarJWT,
   check('nombre','Nombre es obligatorio').not().isEmpty(),
   check('nombre').custom( productoExiste ),
+  check('categoria','No es un ID valido').isMongoId(),
+  check('categoria').custom(existeCategoriaById),
   validarCampos
 ], productosPost );
 
