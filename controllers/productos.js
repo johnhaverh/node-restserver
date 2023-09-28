@@ -53,18 +53,21 @@ const productosPut = async (req, res = response) => {
 
 const productosPost = async (req, res = response) => {
 
-    const {estado, usuario, ...data} = req.body;
-    const productoDB = await Producto.findOne({nombre})
+    const {estado, usuario, ...body} = req.body;
+    const productoDB = await Producto.findOne({nombre: body.nombre})
 
     if(productoDB){
       return res.status(400).json({
         msg: `Producto ${ProductoDB.nombre} ya existe en DB`
       })
     }
-    
-    data.nombre.toUpperCase();
-    data.usuario = req.usuario._id;
 
+    const data ={
+      ...body,
+      nombre: body.nombre.toUpperCase(),
+      usuario: req.usuario._id,
+    }
+    
     const producto = new Producto(data)
 
     await producto.save();
