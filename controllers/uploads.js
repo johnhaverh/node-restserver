@@ -6,12 +6,6 @@ const { subirArchivo } = require("../helpers");
 const { Usuario, Producto } = require('../models');
 
 const archivosPost = async (req, res=response) => {
-
-    // if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
-    //   res.status(400).json({ msg:'No hay archivos cargados'});
-    //   return;
-    // }
-
     try {
         // const nombre = await subirArchivo(req.files, ['txt','md'], 'textos');
         const nombre = await subirArchivo(req.files, undefined, 'imgs');
@@ -48,7 +42,6 @@ const imagenPut = async (req, res=response) =>{
         return res.status(500).json({ msg: 'WIP: Funcionalidad de mostrar imagen'});
   }
 
-
   // Limpiar imágenes previas
   if ( modelo.img ) {
       // Hay que borrar la imagen del servidor
@@ -58,12 +51,10 @@ const imagenPut = async (req, res=response) =>{
       }
   }
 
-
   const nombre = await subirArchivo( req.files, undefined, coleccion );
   modelo.img = nombre;
 
   await modelo.save();
-
 
   res.json( modelo );
 }
@@ -94,7 +85,6 @@ const imagenGet = async(req, res = response ) => {
       default:
           return res.status(500).json({ msg: 'WIP: Funcionalidad de mostrar imagen'});
   }
-
 
   // Limpiar imágenes previas
   if ( modelo.img ) {
