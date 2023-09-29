@@ -13,8 +13,8 @@ const subirArchivo = (files, extensiones = ['jpg','png','gif','jpeg'], carpeta='
             return reject (`Solo se permiten estas extensiones de archivo ${extensiones}`)
         }
     
-        const nombreTemp = uuidv4() + '.' + extension;
         // const uploadPath = path.join(__dirname, '../uploads/', archivo.name);
+        const nombreTemp = uuidv4() + '.' + extension;
         const uploadPath = path.join(__dirname, '../uploads/', carpeta, nombreTemp);
       
         archivo.mv(uploadPath, (err) => {

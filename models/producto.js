@@ -26,19 +26,23 @@ const ProductoSchema = Schema ({
      disponible:{
          type: Boolean,
          default: true,
+     },  
+     
+     img:{
+        type: String,
      },   
 
-    usuario:{
+     usuario:{
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true,
-    },    
+     },    
 
-    categoria:{
+     categoria:{
         type: Schema.Types.ObjectId,
         ref: 'Categoria',
         required: true,
-    },    
+     },    
 
 })
 

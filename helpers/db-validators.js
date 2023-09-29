@@ -52,7 +52,7 @@ const categoriaExiste = async (nombre = '') => {
 }
 
 
-//validaciones prodcuproductostos
+//validaciones productos
 
 const existeProductoById = async (id ) => {
     const existeProducto = await Producto.findById(id);
@@ -75,6 +75,18 @@ const productoExiste = async (nombre = '') => {
     }
 }
 
+/**
+ * Validar colecciones permitidas
+ */
+const coleccionesPermitidas = ( coleccion = '', colecciones = []) => {
+
+    const incluida = colecciones.includes( coleccion );
+    if ( !incluida ) {
+        throw new Error(`La colección ${ coleccion } no es permitida, ${ colecciones }`);
+    }
+    return true;
+}
+
 module.exports = {
     esRoleValido,
     emailExiste,
@@ -82,5 +94,6 @@ module.exports = {
     existeCategoriaById,
     categoriaExiste,
     existeProductoById,
-    productoExiste
+    productoExiste,
+    coleccionesPermitidas
 }
