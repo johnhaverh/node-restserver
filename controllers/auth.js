@@ -88,11 +88,20 @@ const googleSignIn = async (req, res=response) => {
         msg: `Fallo Google login - contactar al administrador ${error}`,
       })
     }
-    
-
   }
+
+  const validarTokenUsuario = async (req, res = response) => {
+    const token = await generarJWT(req.usuario._id);
+  
+    res.json({
+      usuario: req.usuario,
+      token: token,
+    });
+};
+
 
 module.exports = {
     login,
-    googleSignIn
+    googleSignIn,
+    validarTokenUsuario
 }
