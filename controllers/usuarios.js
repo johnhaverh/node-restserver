@@ -33,11 +33,15 @@ const usuariosGetId = async (req = request, res = response) => {
 
     const id= req.params.id;
 
-    const usuario = await Usuario.findById(id);
+    // const usuario = await Usuario.findById(id);
     
-    res.json({
-        usuario
-    })
+    // res.json({
+    //     usuario
+    // })
+
+    const { nombre, correo, role, estado, google, _id, img} = await Usuario.findById(id);
+    
+    res.json({ nombre, correo, role, estado, google, uid: _id, img});
   }
 
 const usuariosPut = async (req, res = response) => {
